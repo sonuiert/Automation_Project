@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## Update the local package
+## Update the local package.
 sudo apt update -y
 
 ## Install Apache2 package
