@@ -60,17 +60,17 @@ else
 	echo  "Log Type\tTime Created\tType\tSize" >/var/www/html/inventory.html
 fi
 
-
-## find the size of the inventory.html file
-filesize=$(du -h /var/www/html/inventory.html | awk '{ print $1}')
+## find the size of the archive file
+filesize=$(du -h /tmp/${name}-httpd-logs-${timestamp}.tar | awk '{ print $1}')
 
 ## log into inventory.html
 echo  "httpd-logs\t$timestamp\ttar\t$filesize" >> /var/www/html/inventory.html
 
 ## Create scheduler for everyday morning 10 AM "00 10 * * * bash /root/Automation_Project/automation.sh"
-iscron=$(crontab -l)
-
-if [[ $iscron == *"automation.sh"* ]]; then
-  echo "Cron is available"
-else echo "00 10 * * * bash /root/Automation_Project/automation.sh" >> crontab -e
+CronFile=/etc/cron.d/Cron_Automation
+if [ -f "$CronFile" ]; then
+    echo "$CronFile exists."
+else
+    sudo touch /etc/cron.d/Cron_Automation
+    sudo echo "00 10 * * * root /root/Automation_Project/automation.sh" > /etc/cron.d/Cron_Automation
 fi
